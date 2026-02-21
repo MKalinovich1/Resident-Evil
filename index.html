@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Evil — Survival Horror Side-Scroller</title>
+    <meta name="description"
+        content="A side-scrolling recreation of the classic Resident Evil (1996) survival horror experience">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Outfit:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- TITLE SCREEN -->
+    <div id="title-screen" class="screen active">
+        <div class="title-fog"></div>
+        <div class="title-blood-drip"></div>
+        <div class="title-content">
+            <h1 class="title-logo">
+                <span class="title-resident">RESIDENT</span>
+                <span class="title-evil">EVIL</span>
+            </h1>
+            <p class="title-subtitle">S I D E - S C R O L L E R</p>
+            <div class="title-menu">
+                <button class="menu-btn selected" id="btn-start" onclick="Game.startGame()">
+                    <span class="menu-arrow">▶</span> NEW GAME
+                </button>
+                <button class="menu-btn" id="btn-controls" onclick="Game.showControls()">
+                    <span class="menu-arrow">▶</span> CONTROLS
+                </button>
+                <button class="menu-btn toggle-btn" id="btn-immortal" onclick="Game.toggleImmortalMode()">
+                    <span class="menu-arrow">▶</span> IMMORTAL: <span id="immortal-status" class="status-off">OFF</span>
+                </button>
+            </div>
+            <p class="title-footer">— PRESS ENTER TO START —</p>
+        </div>
+    </div>
+
+    <!-- CONTROLS SCREEN -->
+    <div id="controls-screen" class="screen">
+        <div class="controls-content">
+            <h2>CONTROLS</h2>
+            <div class="controls-grid">
+                <div class="control-item"><kbd>A / ←</kbd><span>Move Left</span></div>
+                <div class="control-item"><kbd>D / →</kbd><span>Move Right</span></div>
+                <div class="control-item"><kbd>W / ↑</kbd><span>Aim Up</span></div>
+                <div class="control-item"><kbd>S / ↓</kbd><span>Crouch</span></div>
+                <div class="control-item"><kbd>SPACE</kbd><span>Jump</span></div>
+                <div class="control-item"><kbd>J / Z</kbd><span>Shoot / Attack</span></div>
+                <div class="control-item"><kbd>K / X</kbd><span>Interact / Pickup</span></div>
+                <div class="control-item"><kbd>Q / E</kbd><span>Switch Weapon</span></div>
+                <div class="control-item"><kbd>R</kbd><span>Reload</span></div>
+                <div class="control-item"><kbd>I / TAB</kbd><span>Inventory</span></div>
+                <div class="control-item"><kbd>SHIFT</kbd><span>Run</span></div>
+                <div class="control-item"><kbd>ESC</kbd><span>Pause</span></div>
+            </div>
+            <button class="menu-btn" onclick="Game.hideControls()">BACK</button>
+        </div>
+    </div>
+
+    <!-- INTRO CINEMATIC -->
+    <div id="intro-screen" class="screen">
+        <div id="intro-text" class="cinematic-text"></div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen">
+        <!-- Parallax Background Layers -->
+        <div id="bg-layer-0" class="bg-layer"></div>
+        <div id="bg-layer-1" class="bg-layer"></div>
+        <div id="bg-layer-2" class="bg-layer"></div>
+
+        <!-- Game World -->
+        <div id="game-world">
+            <!-- Entities injected dynamically -->
+        </div>
+
+        <!-- Foreground Layer -->
+        <div id="fg-layer" class="bg-layer"></div>
+
+        <!-- Screen Effects -->
+        <div id="screen-vignette" class="screen-effect"></div>
+        <div id="screen-damage" class="screen-effect"></div>
+        <div id="screen-flash" class="screen-effect"></div>
+
+        <!-- HUD -->
+        <div id="hud">
+            <div id="hud-health">
+                <div class="hud-label">CONDITION</div>
+                <div id="health-status" class="health-fine">FINE</div>
+                <div id="health-ecg">
+                    <svg viewBox="0 0 120 30" class="ecg-line">
+                        <polyline id="ecg-wave" points="" fill="none" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                </div>
+            </div>
+            <div id="hud-weapon">
+                <div class="hud-label">WEAPON</div>
+                <div id="weapon-name">BERETTA</div>
+                <div id="weapon-ammo">
+                    <span id="ammo-current">15</span>/<span id="ammo-reserve">45</span>
+                </div>
+            </div>
+            <div id="hud-items">
+                <div class="hud-label">ITEMS</div>
+                <div id="quick-items"></div>
+            </div>
+        </div>
+
+        <!-- Dialogue Box -->
+        <div id="dialogue-box" class="hidden">
+            <div id="dialogue-portrait"></div>
+            <div id="dialogue-content">
+                <div id="dialogue-name"></div>
+                <div id="dialogue-text"></div>
+            </div>
+            <div class="dialogue-prompt">▼</div>
+        </div>
+    </div>
+
+    <!-- DOOR TRANSITION -->
+    <div id="door-transition" class="screen">
+        <div class="door-left"></div>
+        <div class="door-right"></div>
+        <div class="door-crack"></div>
+    </div>
+
+    <!-- INVENTORY SCREEN -->
+    <div id="inventory-screen" class="screen">
+        <div class="inv-container">
+            <h2 class="inv-title">INVENTORY</h2>
+            <div class="inv-panels">
+                <!-- Weapons Panel -->
+                <div class="inv-panel">
+                    <div class="inv-panel-label">WEAPONS</div>
+                    <div id="inv-grid"></div>
+                    <div id="inv-description"></div>
+                    <div class="inv-actions">
+                        <button onclick="Game.inventory.useItem()">EQUIP</button>
+                        <button onclick="Game.inventory.examineItem()">EXAMINE</button>
+                    </div>
+                </div>
+                <!-- Items Panel -->
+                <div class="inv-panel">
+                    <div class="inv-panel-label">ITEMS</div>
+                    <div id="inv-items-grid"></div>
+                </div>
+            </div>
+            <div class="inv-status-bar">
+                <div id="inv-health-display"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAUSE SCREEN -->
+    <div id="pause-screen" class="screen">
+        <div class="pause-content">
+            <h2>PAUSED</h2>
+            <button class="menu-btn" onclick="Game.resume()">RESUME</button>
+            <button class="menu-btn" onclick="Game.showInventoryFromPause()">INVENTORY</button>
+            <button class="menu-btn" onclick="Game.quitToTitle()">QUIT</button>
+        </div>
+    </div>
+
+    <!-- GAME OVER SCREEN -->
+    <div id="gameover-screen" class="screen">
+        <div class="gameover-content">
+            <div class="blood-text">YOU DIED</div>
+            <button class="menu-btn" onclick="Game.restart()">CONTINUE</button>
+            <button class="menu-btn" onclick="Game.quitToTitle()">QUIT</button>
+        </div>
+    </div>
+
+    <!-- SVG DEFINITIONS (reusable sprites) -->
+    <svg id="svg-defs" style="display:none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <!-- Blood splatter filter -->
+            <filter id="blood-filter">
+                <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" />
+            </filter>
+            <!-- Glow filter -->
+            <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                </feMerge>
+            </filter>
+            <!-- Poison tint -->
+            <filter id="poison-tint">
+                <feColorMatrix type="matrix" values="0.6 0 0.4 0 0  0 0.8 0.2 0 0  0.3 0 0.7 0 0  0 0 0 1 0" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/sprites.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/levels.js"></script>
+    <script src="js/game.js"></script>
+</body>
+
+</html>
