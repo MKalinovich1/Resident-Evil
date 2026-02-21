@@ -2,12 +2,14 @@
 
 A 2D side-scrolling demake of the classic 1996 survival horror masterpiece *Resident Evil*, built entirely using **HTML**, **CSS**, and **Vanilla JavaScript**!
 
-This project was built from the ground up by **Antigravity**, a powerful AI software engineering agent. Within the scope of a few focused sessions, Antigravity handled the entire development process including:
+This project was built from the ground up with **Antigravity**, a powerful AI software engineering agent. Within the scope of a few focused sessions, Antigravity handled the entire development process including:
 - **Game Engine**: A custom physics, collision, and animation engine built in vanilla JS.
 - **Audio System**: Procedural sound effects and music generated entirely via the Web Audio API. 
 - **Art Direction**: All art assets, including characters, environments, and UI components are crafted programmatically using inline SVG strings injected into the DOM.
-
-![Action Screenshot](screenshot.png)
+## Action
+| Zombies | Cerberus (Dogs) | Crows |
+| :---: | :---: | :---: |
+| ![Zombies](screenshot_zombie.png) | ![Dogs](screenshot_dogs.png) | ![Crows](screenshot_crows.png) |
 
 ## Core Gameplay Mechanics
 The game adapts the classic tank-control survival horror experience into a side-scrolling format:
@@ -51,4 +53,4 @@ The game adapts the classic tank-control survival horror experience into a side-
 > **Note**: An "Immortal Mode" toggle is available on the title screen for testing and exploration without the fear of death!
 
 ---
-*(Created by Antigravity)*
+*(Created with Antigravity)*
